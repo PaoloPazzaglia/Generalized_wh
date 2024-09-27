@@ -141,6 +141,43 @@ void compute_bp(Task& tk, const vector<Task>& hps) {
 	tk.set_bp(bp);
 }
 
+void compute_wcrt_firstjob(Task& tk, const vector<Task>& hps) {
+
+	double c = tk.get_wcet(), p = tk.get_period();
+	double rt = c;
+	double wcrt = c;
+	double ajrt0 = c;
+
+	do {
+		ajrt0 = wcrt;
+		double I = 0;
+		for (int i = 0; i < hps.size(); i++) {
+			I += ceil(ajrt0 / hps[i].get_period())*hps[i].get_wcet();
+		}
+		wcrt = I + c;
+
+	} while (wcrt > ajrt0);
+
+	tk.set_wcrt(wcrt);
+}
+
+double computeIdle(const std::vector<Task> & hps, const int L) {
+
+	unsigned int c = 1;
+
+	do {
+		Task tk(c, L, L);
+		compute_wcrt_firstjob(tk, hps);
+
+		if (tk.wcrt > L)
+			break;
+		c++;
+
+	} while (c <= L);
+
+	return c - 1;
+}
+
 std::vector<Task> read_a_taskset(const string &fname, const int n)
 {
 	ifstream input(fname);
