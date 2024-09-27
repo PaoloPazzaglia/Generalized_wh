@@ -52,6 +52,7 @@ class Task : public HasUniqueId<Task> {
 void compute_bp(Task& tk, const std::vector<Task>& hps);
 void compute_wcrt(Task& tk, const std::vector<Task>& hps);
 void compute_bcrt(Task& tk, const std::vector<Task>& hps);
+double computeIdle(const std::vector<Task> & hps, const int L);
 
 void tasks_sorting(std::vector<Task> &tks);
 
